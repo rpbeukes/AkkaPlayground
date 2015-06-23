@@ -7,7 +7,7 @@ using System.Text;
 
 namespace WinTail
 {
-     /// <summary>
+    /// <summary>
     /// Monitors the file at <see cref="_filePath"/> for changes and sends file updates to console.
     /// </summary>
     public class TailActor : UntypedActor
@@ -62,15 +62,19 @@ namespace WinTail
 
         private readonly string _filePath;
         private readonly IActorRef _reporterActor;
-        private readonly FileObserver _observer;
-        private readonly Stream _fileStream;
-        private readonly StreamReader _fileStreamReader;
+
+        private FileObserver _observer;
+        private Stream _fileStream;
+        private StreamReader _fileStreamReader;
 
         public TailActor(IActorRef consoleWriterActor, string filePath)
         {
             _reporterActor = consoleWriterActor;
             _filePath = filePath;
+        }
 
+        protected override void PreStart()
+        {
             // start watching file for changes
             _observer = new FileObserver(Self, Path.GetFullPath(_filePath));
             _observer.Start();
@@ -87,6 +91,7 @@ namespace WinTail
 
         protected override void OnReceive(object message)
         {
+            //throw new ArgumentException("ERROR GOOD SIR!!!!"); test some exceptions
             if (message is FileWrite)
             {
                 // move file cursor forward
@@ -109,6 +114,21 @@ namespace WinTail
                 var ir = message as InitialRead;
                 _reporterActor.Tell(ir.Text);
             }
+        }
+
+        protected override void PostStop()
+        {
+            _observer.Dispose();
+            _observer = null;
+            _fileStreamReader.Close();
+            _fileStreamReader.Dispose();
+            _fileStreamReader = null;
+            _fileStream.Close();
+            _fileStream.Dispose();
+            _fileStream = null;
+
+            base.PostStop();
+
         }
     }
 }

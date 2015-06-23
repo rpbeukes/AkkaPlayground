@@ -44,13 +44,13 @@ namespace WinTail
                 var msg = message as StartTail;
                 // YOU NEED TO FILL IN HERE
                 var tailActorChild = Context.ActorOf(Props.Create(() => new TailActor(msg.ReporterActor, msg.FilePath)), typeof(TailActor).ToString());
+                
             }
-
         }
 
         protected override SupervisorStrategy SupervisorStrategy()
         {
-            return new OneForOneStrategy(10, TimeSpan.FromSeconds(30), err =>
+            return new OneForOneStrategy(3, TimeSpan.FromSeconds(30), err =>
             {
                 //Maybe we consider ArithmeticException to not be application critical
                 //so we just ignore the error and keep going.

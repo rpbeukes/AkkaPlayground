@@ -189,3 +189,4 @@ _Pvt_Extensions/
 ModelManifest.xml
 /src/Unit 1/packages
 /src/Unit 2/Lesson2.1 Using HOCON Configuration to Configure AkkaNET/packages
+/src/Unit 2/Lesson2.2 Using ReceiveActor for Smarter Message Handling/packages

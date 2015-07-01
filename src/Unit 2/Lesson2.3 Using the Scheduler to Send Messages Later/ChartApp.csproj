@@ -102,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\ButtonToggleActor.cs" />
     <Compile Include="Actors\ChartingActor.cs" />
     <Compile Include="Actors\AddSeries.cs" />
     <Compile Include="Actors\ChartingMessages.cs" />
